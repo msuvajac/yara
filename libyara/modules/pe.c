@@ -88,8 +88,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RESOURCE_ITERATOR_ABORTED    1
 
 
-#define MAX_PE_IMPORTS               16384
-#define MAX_PE_EXPORTS               65535
+#define MAX_PE_IMPORTS               1024
+#define MAX_PE_EXPORTS               32768
 
 
 #define IS_RESOURCE_SUBDIRECTORY(entry) \
