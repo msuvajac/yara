@@ -112,7 +112,6 @@ with noyywrap then we can remove this pragma.
 %option never-interactive
 %option yylineno
 %option prefix="yara_yy"
-%option outfile="lex.yy.c"
 
 %option verbose
 %option warn
