@@ -697,6 +697,7 @@ YR_RULE* yr_parser_reduce_rule_declaration_phase_1(
 {
   YR_COMPILER* compiler = yyget_extra(yyscanner);
   YR_RULE* rule = NULL;
+  const char* file_name = NULL;
 
   if (yr_hash_table_lookup(
         compiler->rules_table,
@@ -721,6 +722,7 @@ YR_RULE* yr_parser_reduce_rule_declaration_phase_1(
       (void**) &rule,
       offsetof(YR_RULE, identifier),
       offsetof(YR_RULE, tags),
+      offsetof(YR_RULE, file_name),
       offsetof(YR_RULE, strings),
       offsetof(YR_RULE, metas),
       offsetof(YR_RULE, ns),
@@ -743,6 +745,20 @@ YR_RULE* yr_parser_reduce_rule_declaration_phase_1(
 
   if (compiler->last_result != ERROR_SUCCESS)
     return NULL;
+
+  if (compiler->file_name_stack_ptr > 0)
+    file_name = compiler->file_name_stack[compiler->file_name_stack_ptr - 1];
+
+  if (file_name != NULL)
+  {
+    compiler->last_result = yr_arena_write_string(
+        compiler->sz_arena,
+        file_name,
+        (char**) &rule->file_name);
+
+    if (compiler->last_result != ERROR_SUCCESS)
+      return NULL;
+  }
 
   compiler->last_result = yr_parser_emit_with_arg_reloc(
       yyscanner,
