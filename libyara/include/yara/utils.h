@@ -31,6 +31,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef YR_UTILS_H
 #define YR_UTILS_H
 
+#include <limits.h>
+
 #ifndef TRUE
 #define TRUE 1
 #endif
@@ -78,7 +80,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #else
 
 #include <stdlib.h>
-#include <limits.h>
 
 #define assertf(expr, msg, ...) \
     if(!(expr)) { \
