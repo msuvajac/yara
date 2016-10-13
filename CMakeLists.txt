@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.2)
 
 project(yara C)
 
+set(CMAKE_C_STANDARD 99)
+
 set(PACKAGE "yara")
 set(VERSION_MAJOR 3)
 set(VERSION_MINOR 5)
