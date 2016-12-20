@@ -111,6 +111,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 if(LIBYARA_SHARED)
     add_library(libyara SHARED ${LIBYARA_INCLUDES} ${LIBYARA_SOURCES})
 else()
+    target_compile_definitions(libyara PRIVATE YARA_STATICLIB=1)
     add_library(libyara STATIC ${LIBYARA_INCLUDES} ${LIBYARA_SOURCES})
 endif()
 set_target_properties(libyara PROPERTIES PREFIX "")
