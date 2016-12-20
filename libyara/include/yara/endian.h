@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013. The YARA Authors. All Rights Reserved.
+Copyright (c) 2016. The YARA Authors. All Rights Reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -27,40 +27,37 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef YR_LIMITS_H
-#define YR_LIMITS_H
+#ifndef YR_ENDIAN_H
+#define YR_ENDIAN_H
 
-#if defined(_WIN32) || defined(__CYGWIN__)
-#include <windows.h>
+#include <config.h>
+
+#if defined(__GNUC__)
+#define yr_bswap16(x) __builtin_bswap16(x)
+#define yr_bswap32(x) __builtin_bswap32(x)
+#define yr_bswap64(x) __builtin_bswap64(x)
+#elif defined(_MSC_VER)
+#define yr_bswap16(x) _byteswap_ushort(x)
+#define yr_bswap32(x) _byteswap_ulong(x)
+#define yr_bswap64(x) _byteswap_uint64(x)
+#else
+#error Unknown compiler: Add yr_bswap* definitions
 #endif
 
-#include "utils.h"
-
-// MAX_THREADS is the number of threads that can use a YR_RULES
-// object simultaneously.
-
-#define MAX_THREADS 32
-
-
-#ifndef MAX_PATH
-#define MAX_PATH 1024
+#if defined(WORDS_BIGENDIAN)
+#define yr_le16toh(x) yr_bswap16(x)
+#define yr_le32toh(x) yr_bswap32(x)
+#define yr_le64toh(x) yr_bswap64(x)
+#define yr_be16toh(x) (x)
+#define yr_be32toh(x) (x)
+#define yr_be64toh(x) (x)
+#else
+#define yr_le16toh(x) (x)
+#define yr_le32toh(x) (x)
+#define yr_le64toh(x) (x)
+#define yr_be16toh(x) yr_bswap16(x)
+#define yr_be32toh(x) yr_bswap32(x)
+#define yr_be64toh(x) yr_bswap64(x)
 #endif
-
-#define MAX_COMPILER_ERROR_EXTRA_INFO   256
-#define MAX_ATOM_LENGTH                 4
-#define MAX_LOOP_NESTING                4
-#define MAX_ARENA_PAGES                 32
-#define MAX_INCLUDE_DEPTH               16
-#define MAX_STRING_MATCHES              1000000
-#define MAX_FUNCTION_ARGS               128
-#define MAX_FAST_HEX_RE_STACK           300
-#define MAX_OVERLOADED_FUNCTIONS        10
-#define MAX_HEX_STRING_TOKENS           10000
-#define MAX_MATCH_DATA                  4096
-
-#define LOOP_LOCAL_VARS                 4
-#define STRING_CHAINING_THRESHOLD       200
-#define LEX_BUF_SIZE                    8192
-
 
 #endif
