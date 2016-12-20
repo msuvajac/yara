@@ -51,16 +51,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define EXTERNC
 #endif
 
-#ifdef YARA_STATICLIB
-#define YR_API
-#else
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(YARA_STATICLIB)
 #define YR_API EXTERNC __attribute__((visibility("default")))
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) && !defined(YARA_STATICLIB)
 #define YR_API EXTERNC __declspec(dllexport)
 #else
 #define YR_API EXTERNC
-#endif
 #endif
 
 #if defined(__GNUC__)
