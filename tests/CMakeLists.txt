@@ -16,3 +16,14 @@ add_executable(test_pe test-pe.c util.c)
 target_link_libraries(test_pe libyara)
 add_test(NAME test_pe COMMAND $<TARGET_FILE:test_pe>
          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..)
+
+add_executable(test_endian test-endian.c util.c)
+target_link_libraries(test_endian libyara)
+add_test(NAME test_endian COMMAND $<TARGET_FILE:test_endian>
+         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..)
+
+add_executable(test_exception test-exception.c util.c)
+target_link_libraries(test_exception libyara)
+add_test(NAME test_exception COMMAND $<TARGET_FILE:test_exception>
+         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..)
+
