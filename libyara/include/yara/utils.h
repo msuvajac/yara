@@ -53,7 +53,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifdef YARA_STATICLIB
 #define YR_API
-#elif
+#else
 #if defined(__GNUC__)
 #define YR_API EXTERNC __attribute__((visibility("default")))
 #elif defined(_MSC_VER)
