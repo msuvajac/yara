@@ -72,7 +72,7 @@ if(HASH_MODULE)
     if(NOT OPENSSL_FOUND)
         find_package(OpenSSL REQUIRED)
     endif()
-    list(APPEND LIBYARA_INCLUDES ${OPENSSL_INCLUDES})
+    list(APPEND LIBYARA_INCLUDES ${OPENSSL_INCLUDE_DIR})
     yara_append_library(LIBYARA_LIBRARIES OPENSSL_FOUND OPENSSL_LIBRARIES)
     set(HAVE_LIBCRYPTO 1)
 endif()
@@ -124,7 +124,7 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in.cmake
                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${LIBYARA_INCLUDES})
 
 add_definitions(-DHAVE_CONFIG_H)
 
