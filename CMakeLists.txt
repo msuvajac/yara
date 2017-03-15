@@ -53,6 +53,7 @@ yara_nodef_option(YARA_BUILD_EXECUTABLE "Build Yara executable" ON)
 yara_nodef_option(YARA_BUILD_COMPILER "Build Yara compiler" ON)
 yara_option(PROFILING_ENABLED "Enable profiling support" OFF)
 yara_option(DMALLOC "Enable dmalloc to debug heap-related issues" OFF)
+yara_option(YARA_DISABLE_OPENSSL_LOCKS "Disable OpenSSL locks if you control the locking" OFF)
 yara_nodef_option(YARA_PACKAGE_RPM "When packaging, package Yara binaries into RPM" ON)
 message(STATUS "===================================================")
 
