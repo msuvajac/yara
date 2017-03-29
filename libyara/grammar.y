@@ -824,6 +824,8 @@ arguments_list
           case EXPRESSION_TYPE_REGEXP:
             strlcpy($$, "r", MAX_FUNCTION_ARGS);
             break;
+          default:
+            assert(FALSE);
         }
 
         ERROR_IF($$ == NULL);
@@ -853,6 +855,8 @@ arguments_list
             case EXPRESSION_TYPE_REGEXP:
               strlcat($1, "r", MAX_FUNCTION_ARGS);
               break;
+            default:
+              assert(FALSE);
           }
         }
 
@@ -890,17 +894,13 @@ regexp
         if (compiler->last_result == ERROR_INVALID_REGULAR_EXPRESSION)
           yr_compiler_set_error_extra_info(compiler, error.message);
 
-        ERROR_IF(compiler->last_result != ERROR_SUCCESS);
-
         if (compiler->last_result == ERROR_SUCCESS)
           compiler->last_result = yr_parser_emit_with_arg_reloc(
               yyscanner,
               OP_PUSH,
-              re->root_node->forward_code,
+              re,
               NULL,
               NULL);
-
-        yr_re_destroy(re);
 
         ERROR_IF(compiler->last_result != ERROR_SUCCESS);
 
@@ -1014,6 +1014,16 @@ expression
         ERROR_IF(compiler->last_result!= ERROR_SUCCESS);
 
         $$.type = EXPRESSION_TYPE_BOOLEAN;
+      }
+    | _FOR_ for_expression error
+      {
+        if (compiler->loop_depth > 0)
+        {
+          compiler->loop_depth--;
+          compiler->loop_identifier[compiler->loop_depth] = NULL;
+        }
+
+        YYERROR;
       }
     | _FOR_ for_expression _IDENTIFIER_ _IN_
       {

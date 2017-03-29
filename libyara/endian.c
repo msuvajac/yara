@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013. The YARA Authors. All Rights Reserved.
+Copyright (c) 2017. The YARA Authors. All Rights Reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -27,76 +27,27 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef YR_ATOMS_H
-#define YR_ATOMS_H
+#include <yara/endian.h>
 
-#include <yara/limits.h>
-#include <yara/re.h>
-
-#define ATOM_TREE_LEAF  1
-#define ATOM_TREE_AND   2
-#define ATOM_TREE_OR    3
-
-
-typedef struct _ATOM_TREE_NODE
+uint16_t _yr_bswap16(uint16_t x)
 {
-  uint8_t type;
-  uint8_t atom_length;
-  uint8_t atom[MAX_ATOM_LENGTH];
+  return (x >> 8 | x << 8);
+}
 
-  uint8_t* forward_code;
-  uint8_t* backward_code;
-
-  RE_NODE* recent_nodes[MAX_ATOM_LENGTH];
-
-  struct _ATOM_TREE_NODE* children_head;
-  struct _ATOM_TREE_NODE* children_tail;
-  struct _ATOM_TREE_NODE* next_sibling;
-
-} ATOM_TREE_NODE;
-
-
-typedef struct _ATOM_TREE
+uint32_t _yr_bswap32(uint32_t x)
 {
-  ATOM_TREE_NODE* current_leaf;
-  ATOM_TREE_NODE* root_node;
+  return ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) |
+          (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24));
+}
 
-} ATOM_TREE;
-
-
-typedef struct _YR_ATOM_LIST_ITEM
+uint64_t _yr_bswap64(uint64_t x)
 {
-  uint8_t atom_length;
-  uint8_t atom[MAX_ATOM_LENGTH];
-
-  uint16_t backtrack;
-
-  uint8_t* forward_code;
-  uint8_t* backward_code;
-
-  struct _YR_ATOM_LIST_ITEM* next;
-
-} YR_ATOM_LIST_ITEM;
-
-
-int yr_atoms_extract_from_re(
-    RE_AST* re_ast,
-    int flags,
-    YR_ATOM_LIST_ITEM** atoms);
-
-
-int yr_atoms_extract_from_string(
-    uint8_t* string,
-    int string_length,
-    int flags,
-    YR_ATOM_LIST_ITEM** atoms);
-
-
-int yr_atoms_min_quality(
-    YR_ATOM_LIST_ITEM* atom_list);
-
-
-void yr_atoms_list_destroy(
-    YR_ATOM_LIST_ITEM* list_head);
-
-#endif
+  return ((((x) & 0xff00000000000000ull) >> 56)
+        | (((x) & 0x00ff000000000000ull) >> 40)
+        | (((x) & 0x0000ff0000000000ull) >> 24)
+        | (((x) & 0x000000ff00000000ull) >> 8)
+        | (((x) & 0x00000000ff000000ull) << 8)
+        | (((x) & 0x0000000000ff0000ull) << 24)
+        | (((x) & 0x000000000000ff00ull) << 40)
+        | (((x) & 0x00000000000000ffull) << 56));
+}

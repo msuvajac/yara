@@ -259,7 +259,7 @@ hex_digit     [0-9a-fA-F]
   }
   else
   {
-    yyerror(yyscanner, lex_env, "unexpected end of buffer");
+    yyerror(yyscanner, lex_env, "illegal escape sequence");
     yyterminate();
   }
 }
@@ -310,7 +310,7 @@ hex_digit     [0-9a-fA-F]
   {
     if (!read_escaped_char(yyscanner, &end))
     {
-      yyerror(yyscanner, lex_env, "unexpected end of buffer");
+      yyerror(yyscanner, lex_env, "illegal escape sequence");
       yyterminate();
     }
   }
@@ -408,7 +408,7 @@ hex_digit     [0-9a-fA-F]
   }
   else
   {
-    yyerror(yyscanner, lex_env, "unexpected end of buffer");
+    yyerror(yyscanner, lex_env, "illegal escape sequence");
     yyterminate();
   }
 }
@@ -522,19 +522,19 @@ int read_escaped_char(
   text[0] = '\\';
   text[1] = RE_YY_INPUT(yyscanner);
 
-  if (text[1] == EOF)
+  if (text[1] == EOF || text[1] == 0)
     return 0;
 
   if (text[1] == 'x')
   {
     text[2] = RE_YY_INPUT(yyscanner);
 
-    if (text[2] == EOF)
+    if (!isxdigit(text[2]))
       return 0;
 
     text[3] = RE_YY_INPUT(yyscanner);
 
-    if (text[3] == EOF)
+    if (!isxdigit(text[3]))
       return 0;
   }
 
@@ -582,8 +582,7 @@ void yyerror(
 
 int yr_parse_re_string(
   const char* re_string,
-  int flags,
-  RE** re,
+  RE_AST** re_ast,
   RE_ERROR* error)
 {
   yyscan_t yyscanner;
@@ -597,20 +596,18 @@ int yr_parse_re_string(
   if (setjmp(recovery_state) != 0)
     return ERROR_INTERNAL_FATAL_ERROR;
 
-  FAIL_ON_ERROR(yr_re_create(re));
-
-  (*re)->flags = flags;
+  FAIL_ON_ERROR(yr_re_ast_create(re_ast));
 
   yylex_init(&yyscanner);
-  yyset_extra(*re, yyscanner);
+  yyset_extra(*re_ast, yyscanner);
   yy_scan_string(re_string, yyscanner);
   yyparse(yyscanner, &lex_env);
   yylex_destroy(yyscanner);
 
   if (lex_env.last_error_code != ERROR_SUCCESS)
   {
-    yr_re_destroy(*re);
-    *re = NULL;
+    yr_re_ast_destroy(*re_ast);
+    *re_ast = NULL;
 
     strlcpy(
         error->message,

@@ -36,12 +36,12 @@ matrix:
         sudo apt-get update
         sudo apt-get install -y gcc-mingw-w64 autoconf automake libtool
     - os: osx
-      # Xcode 7.0.1 GM on OS X 10.10. This still includes OpenSSL.
-      osx_image: xcode7
+      osx_image: xcode7.3
 
 before_script: ./bootstrap.sh
 
 script: |
+  rvm get head  # Workaround for Travis CI issue https://github.com/travis-ci/travis-ci/issues/6307
   set -e
   unset CC # A pre-set CC overrides --host settings.
   ./configure $CONFIGFLAGS
@@ -50,6 +50,7 @@ script: |
     *--host=*mingw*) ;;
     *) make check ;;
   esac
+  set +e
 
 after_failure: if [ -e test-suite.log ]; then cat test-suite.log; fi
 

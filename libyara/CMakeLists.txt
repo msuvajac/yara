@@ -76,6 +76,7 @@ set(LIBYARA_SOURCES ${MODULE_SOURCES}
                     arena.c
                     atoms.c
                     compiler.c
+		    endian.c
                     exec.c
                     exefiles.c
                     filemap.c

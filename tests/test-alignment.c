@@ -67,7 +67,7 @@ int err = 0;
 
 int main (int argc, char **argv)
 {
-  assert(ARENA_FILE_VERSION == 11);
+  assert(ARENA_FILE_VERSION == 12);
 
   CHECK_SIZE(YR_NAMESPACE, 4 * MAX_THREADS + 8);
   CHECK_OFFSET(YR_NAMESPACE, 4 * MAX_THREADS, name);
@@ -94,7 +94,7 @@ int main (int argc, char **argv)
   CHECK_OFFSET(YR_STRING, 36, chain_gap_max);
   CHECK_OFFSET(YR_STRING, 40, fixed_offset);
 
-  CHECK_SIZE(YR_RULE, 8 + 4 * MAX_THREADS + 48
+  CHECK_SIZE(YR_RULE, 8 + 4 * MAX_THREADS + 40
 #            ifdef PROFILING_ENABLED
              + 8
 #            endif
@@ -102,10 +102,9 @@ int main (int argc, char **argv)
   CHECK_OFFSET(YR_RULE, 4,                        t_flags);
   CHECK_OFFSET(YR_RULE, 8 + 4 * MAX_THREADS,      identifier);
   CHECK_OFFSET(YR_RULE, 8 + 4 * MAX_THREADS + 8,  tags);
-  CHECK_OFFSET(YR_RULE, 8 + 4 * MAX_THREADS + 16, file_name);
-  CHECK_OFFSET(YR_RULE, 8 + 4 * MAX_THREADS + 24, metas);
-  CHECK_OFFSET(YR_RULE, 8 + 4 * MAX_THREADS + 32, strings);
-  CHECK_OFFSET(YR_RULE, 8 + 4 * MAX_THREADS + 40, ns);
+  CHECK_OFFSET(YR_RULE, 8 + 4 * MAX_THREADS + 16, metas);
+  CHECK_OFFSET(YR_RULE, 8 + 4 * MAX_THREADS + 24, strings);
+  CHECK_OFFSET(YR_RULE, 8 + 4 * MAX_THREADS + 32, ns);
 
   CHECK_SIZE(YR_EXTERNAL_VARIABLE, 24);
   CHECK_OFFSET(YR_EXTERNAL_VARIABLE, 8,  value.i);

@@ -3,7 +3,6 @@ MODULES =  modules/tests.c
 MODULES += modules/pe.c
 MODULES += modules/elf.c
 MODULES += modules/math.c
-MODULES += modules/dotnet.c
 
 if CUCKOO_MODULE
 MODULES += modules/cuckoo.c
@@ -17,6 +16,10 @@ if HASH_MODULE
 MODULES += modules/hash.c
 endif
 
+if DOTNET_MODULE
+MODULES += modules/dotnet.c
+endif
+
 # This isn't really a module, but needs to be compiled with them.
 MODULES += modules/pe_utils.c
 
@@ -28,7 +31,21 @@ MODULES += modules/pe_utils.c
 
 AM_YFLAGS=-d
 
-AM_CFLAGS=-O3 -Wall -Wno-deprecated-declarations -std=gnu99 -I$(srcdir)/include
+AM_CFLAGS=-Wall -Wno-deprecated-declarations -std=gnu99 -I$(srcdir)/include
+
+if DEBUG
+AM_CFLAGS+=-g
+endif
+
+if OPTIMIZATION
+AM_CFLAGS+=-O3
+else
+AM_CFLAGS+=-O0
+endif
+
+if ADDRESS_SANITIZER
+AM_CFLAGS+=-fsanitize=address
+endif
 
 if GCC
 AM_CFLAGS+=-fvisibility=hidden
@@ -74,6 +91,7 @@ libyara_la_SOURCES = \
   arena.c \
   atoms.c \
   compiler.c \
+  endian.c \
   exec.c \
   exefiles.c \
   exefiles.h \

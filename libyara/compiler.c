@@ -141,7 +141,7 @@ YR_API void yr_compiler_destroy(
   yr_arena_destroy(compiler->automaton_arena);
   yr_arena_destroy(compiler->matches_arena);
 
-    yr_ac_automaton_destroy(compiler->automaton);
+  yr_ac_automaton_destroy(compiler->automaton);
 
   yr_hash_table_destroy(
       compiler->rules_table,
@@ -943,6 +943,13 @@ YR_API char* yr_compiler_get_error_message(
           buffer,
           buffer_size,
           "unknown module \"%s\"",
+          compiler->last_error_extra_info);
+      break;
+    case ERROR_INVALID_MODULE_NAME:
+      snprintf(
+          buffer,
+          buffer_size,
+          "invalid module name \"%s\"",
           compiler->last_error_extra_info);
       break;
     case ERROR_DUPLICATED_STRUCTURE_MEMBER:

@@ -104,6 +104,7 @@
     <ClCompile Include="..\..\..\libyara\arena.c" />
     <ClCompile Include="..\..\..\libyara\atoms.c" />
     <ClCompile Include="..\..\..\libyara\compiler.c" />
+    <ClCompile Include="..\..\..\libyara\endian.c" />
     <ClCompile Include="..\..\..\libyara\exec.c" />
     <ClCompile Include="..\..\..\libyara\exefiles.c" />
     <ClCompile Include="..\..\..\libyara\filemap.c" />
