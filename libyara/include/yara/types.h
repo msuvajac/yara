@@ -472,7 +472,6 @@ typedef struct _YR_OBJECT
   YR_VALUE value;
 
 } YR_OBJECT;
-  RE* value;
 
 
 typedef struct _YR_OBJECT_STRUCTURE

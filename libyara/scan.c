@@ -594,7 +594,6 @@ int _yr_scan_verify_re_match(
 
   if (forward_matches == -1)
     return ERROR_SUCCESS;
-      return ERROR_INSUFICIENT_MEMORY;
 
   if (forward_matches == 0 && ac_match->backward_code == NULL)
     return ERROR_SUCCESS;
@@ -618,7 +617,6 @@ int _yr_scan_verify_re_match(
         _yr_scan_match_callback,
         (void*) &callback_args,
         &backward_matches));
-        return ERROR_INSUFICIENT_MEMORY;
   }
   else
   {
