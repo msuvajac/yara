@@ -1,4 +1,4 @@
-AC_INIT([yara], [3.5.0], [vmalvarez@virustotal.com])
+AC_INIT([yara], [3.6.0], [vmalvarez@virustotal.com])
 
 AC_CONFIG_SRCDIR([yara.c])
 
@@ -155,6 +155,5 @@ AM_CONDITIONAL([GCC], [test "x$GCC" = xyes])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([libyara/Makefile])
-AC_CONFIG_HEADERS([config.h])
 
 AC_OUTPUT
