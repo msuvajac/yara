@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2014. The YARA Authors. All Rights Reserved.
+Copyright (c) 2016. The YARA Authors. All Rights Reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -27,59 +27,13 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef YR_LIBYARA_H
-#define YR_LIBYARA_H
+#include <yara.h>
+#include <strings.h>
 
-#include <yara/utils.h>
-
-#define YR_MAJOR_VERSION   3
-#define YR_MINOR_VERSION   6
-#define YR_MICRO_VERSION   0
-
-#define version_str(s) _version_str(s)
-#define _version_str(s) #s
-
-// Version as a string
-#define YR_VERSION version_str(YR_MAJOR_VERSION) \
-    "." version_str(YR_MINOR_VERSION) \
-    "." version_str(YR_MICRO_VERSION)
-
-// Version as a single 4-byte hex number, e.g. 0x030401 == 3.4.1.
-#define YR_VERSION_HEX ((YR_MAJOR_VERSION << 16) | \
-    (YR_MINOR_VERSION << 8) | \
-    (YR_MICRO_VERSION << 0))
-
-
-// Enumerated type listing configuration options
-typedef enum _YR_CONFIG_NAME
+int main (int argc, char **argv)
 {
-  YR_CONFIG_STACK_SIZE,
-  YR_CONFIG_MAX
+  // make sure that versions defined in configure.ac and in
+  // libyara/include/yara/libyara.h are in sync.
 
-} YR_CONFIG_NAME;
-
-
-#define DEFAULT_STACK_SIZE 16384
-
-
-YR_API int yr_initialize(void);
-
-
-YR_API int yr_finalize(void);
-
-
-YR_API void yr_finalize_thread(void);
-
-
-YR_API int yr_get_tidx(void);
-
-
-YR_API void yr_set_tidx(int);
-
-
-YR_API int yr_set_configuration(YR_CONFIG_NAME, void*);
-
-
-YR_API int yr_get_configuration(YR_CONFIG_NAME, void*);
-
-#endif
+  return strcmp(PACKAGE_VERSION, YR_VERSION);
+}

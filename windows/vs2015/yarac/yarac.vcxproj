@@ -14,7 +14,6 @@
     <ProjectGuid>{7C72350B-AA5B-41AD-8957-CE3924A7F11B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>yarac</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
