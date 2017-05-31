@@ -883,7 +883,7 @@ int yr_lex_parse_rules_fd(
 
       if (tmp == NULL)
       {
-        if (str)
+        if (file_str)
           yara_yyfree(file_str, yyscanner);
 
         YY_FATAL_ERROR("not enough memory");
