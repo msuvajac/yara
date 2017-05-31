@@ -828,8 +828,12 @@ int yr_lex_parse_rules_fd(
   YR_FILE_DESCRIPTOR rules_fd,
   YR_COMPILER* compiler)
 {
+  yy_size_t total_mem = 0;
+  yy_size_t total_bytes = 0;
+  char* file_str = NULL;
+  char* tmp = NULL;
   yyscan_t yyscanner;
-  char buf[1024];
+  char buf[YY_BUF_SIZE];
 
   compiler->errors = 0;
 
@@ -861,10 +865,53 @@ int yr_lex_parse_rules_fd(
 #endif
     if (len == 0)
       break;
-    yy_scan_bytes(buf, len, yyscanner);
+
+    yy_size_t bytes = (yy_size_t) len;
+
+    while (total_bytes + bytes + 2 >= total_mem)
+    {
+      if (file_str)
+      {
+        total_mem *= 2;
+      }
+      else
+      {
+        total_mem = yr_min(bytes + 2, sizeof(buf));
+      }
+
+      tmp = yara_yyrealloc(file_str, total_mem, yyscanner);
+
+      if (tmp == NULL)
+      {
+        if (str)
+          yara_yyfree(file_str, yyscanner);
+
+        YY_FATAL_ERROR("not enough memory");
+      }
+
+      file_str = tmp;
+    }
+    
+    assert(file_str != NULL);
+    memcpy(file_str + total_bytes, buf, bytes);
+
+    total_bytes += bytes;
   }
 
+  if (total_mem == 0)
+  {
+    return compiler->errors;
+  }
+
+  // Ensure string ends with EOBs as required by parser.
+  file_str[total_bytes++] = YY_END_OF_BUFFER_CHAR;
+  file_str[total_bytes++] = YY_END_OF_BUFFER_CHAR;
+
+  yy_scan_buffer(file_str, total_bytes, yyscanner);
+
   yyparse(yyscanner, compiler);
+
+  yara_yyfree(file_str, yyscanner);
   yylex_destroy(yyscanner);
 
   return compiler->errors;

@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YARA_YY_GRAMMAR_H_INCLUDED
-# define YY_YARA_YY_GRAMMAR_H_INCLUDED
+#ifndef YY_YARA_YY_YARA_GRAMMAR_H_INCLUDED
+# define YY_YARA_YY_YARA_GRAMMAR_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -152,7 +152,7 @@ extern int yara_yydebug;
 
 union YYSTYPE
 {
-#line 204 "grammar.y" /* yacc.c:1915  */
+
 
   EXPRESSION      expression;
   SIZED_STRING*   sized_string;
@@ -163,7 +163,7 @@ union YYSTYPE
   YR_META*        meta;
   YR_RULE*        rule;
 
-#line 167 "grammar.h" /* yacc.c:1915  */
+
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -175,4 +175,4 @@ typedef union YYSTYPE YYSTYPE;
 
 int yara_yyparse (void *yyscanner, YR_COMPILER* compiler);
 
-#endif /* !YY_YARA_YY_GRAMMAR_H_INCLUDED  */
+#endif /* !YY_YARA_YY_YARA_GRAMMAR_H_INCLUDED  */

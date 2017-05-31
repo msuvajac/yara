@@ -46,23 +46,24 @@ list(APPEND LIBYARA_INCLUDES include/yara.h
                              include/yara/integers.h
                              include/yara/libyara.h)
 
-set(BISON_FLAGS "-y")
+set(BISON_FLAGS "-y -l")
+set(FLEX_FLAGS "-L")
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/generated_files)
 
-FLEX_TARGET(YARA_LEXER lexer.l ${CMAKE_CURRENT_BINARY_DIR}/generated_files/lexer.c)
+FLEX_TARGET(YARA_LEXER lexer.l ${CMAKE_CURRENT_BINARY_DIR}/generated_files/lexer.c COMPILE_FLAGS ${FLEX_FLAGS})
 BISON_TARGET(YARA_GRAMMAR grammar.y ${CMAKE_CURRENT_BINARY_DIR}/generated_files/grammar.c
              DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/generated_files/grammar.h
              COMPILE_FLAGS ${BISON_FLAGS})
 ADD_FLEX_BISON_DEPENDENCY(YARA_LEXER YARA_GRAMMAR)
 
-FLEX_TARGET(YARA_HEX_LEXER hex_lexer.l ${CMAKE_CURRENT_BINARY_DIR}/generated_files/hex_lexer.c)
+FLEX_TARGET(YARA_HEX_LEXER hex_lexer.l ${CMAKE_CURRENT_BINARY_DIR}/generated_files/hex_lexer.c COMPILE_FLAGS ${FLEX_FLAGS})
 BISON_TARGET(YARA_HEX_GRAMMAR hex_grammar.y ${CMAKE_CURRENT_BINARY_DIR}/generated_files/hex_grammar.c
              DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/generated_files/hex_grammar.h
              COMPILE_FLAGS ${BISON_FLAGS})
 ADD_FLEX_BISON_DEPENDENCY(YARA_HEX_LEXER YARA_HEX_GRAMMAR)
 
-FLEX_TARGET(YARA_RE_LEXER re_lexer.l ${CMAKE_CURRENT_BINARY_DIR}/generated_files/re_lexer.c)
+FLEX_TARGET(YARA_RE_LEXER re_lexer.l ${CMAKE_CURRENT_BINARY_DIR}/generated_files/re_lexer.c COMPILE_FLAGS ${FLEX_FLAGS})
 BISON_TARGET(YARA_RE_GRAMMAR re_grammar.y ${CMAKE_CURRENT_BINARY_DIR}/generated_files/re_grammar.c
              DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/generated_files/re_grammar.h
              COMPILE_FLAGS ${BISON_FLAGS})
