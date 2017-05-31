@@ -879,12 +879,12 @@ int yr_lex_parse_rules_fd(
         total_mem = yr_min(bytes + 2, sizeof(buf));
       }
 
-      tmp = yara_yyrealloc(file_str, total_mem, yyscanner);
+      tmp = yyrealloc(file_str, total_mem, yyscanner);
 
       if (tmp == NULL)
       {
         if (file_str)
-          yara_yyfree(file_str, yyscanner);
+          yyfree(file_str, yyscanner);
 
         YY_FATAL_ERROR("not enough memory");
       }
@@ -911,7 +911,7 @@ int yr_lex_parse_rules_fd(
 
   yyparse(yyscanner, compiler);
 
-  yara_yyfree(file_str, yyscanner);
+  yyfree(file_str, yyscanner);
   yylex_destroy(yyscanner);
 
   return compiler->errors;
