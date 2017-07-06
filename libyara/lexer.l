@@ -471,8 +471,12 @@ u?int(8|16|32)(be)? {
 }
 
 0x{hexdigit}+  {
-
   yylval->integer = xtoi(yytext + 2);
+  return _NUMBER_;
+}
+
+0o{octdigit}+  {
+  yylval->integer = otoi(yytext + 2);
   return _NUMBER_;
 }
 

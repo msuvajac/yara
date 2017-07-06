@@ -1421,7 +1421,6 @@ int _yr_re_fiber_exists(
   int equal_stacks;
   int i;
 
-
   if (last_fiber == NULL)
     return FALSE;
 
@@ -1618,20 +1617,18 @@ int _yr_re_fiber_sync(
 
   RE_FIBER* fiber;
   RE_FIBER* last;
-  RE_FIBER* prev;
   RE_FIBER* next;
   RE_FIBER* branch_a;
   RE_FIBER* branch_b;
 
   fiber = fiber_to_sync;
-  prev = fiber_to_sync->prev;
   last = fiber_to_sync->next;
 
-  while(fiber != last)
+  while (fiber != last)
   {
     uint8_t opcode = *fiber->ip;
 
-    switch(opcode)
+    switch (opcode)
     {
       case RE_OPCODE_SPLIT_A:
       case RE_OPCODE_SPLIT_B:
@@ -1803,10 +1800,7 @@ int _yr_re_fiber_sync(
         break;
 
       default:
-        if (_yr_re_fiber_exists(fiber_list, fiber, prev))
-          fiber = _yr_re_fiber_kill(fiber_list, fiber_pool, fiber);
-        else
-          fiber = fiber->next;
+        fiber = fiber->next;
     }
   }
 
@@ -1940,12 +1934,24 @@ int yr_re_exec(
   {
     fiber = fibers.head;
 
-    while(fiber != NULL)
+    while (fiber != NULL)
+    {
+      next_fiber = fiber->next;
+
+      if (_yr_re_fiber_exists(&fibers, fiber, fiber->prev))
+        _yr_re_fiber_kill(&fibers, &storage->fiber_pool, fiber);
+
+      fiber = next_fiber;
+    }
+
+    fiber = fibers.head;
+
+    while (fiber != NULL)
     {
       ip = fiber->ip;
       action = ACTION_NONE;
 
-      switch(*ip)
+      switch (*ip)
       {
         case RE_OPCODE_ANY:
           prolog;
@@ -2019,7 +2025,7 @@ int yr_re_exec(
 
           prolog;
 
-          switch(*input)
+          switch (*input)
           {
             case ' ':
             case '\t':
@@ -2144,7 +2150,7 @@ int yr_re_exec(
           assert(FALSE);
       }
 
-      switch(action)
+      switch (action)
       {
         case ACTION_KILL:
           fiber = _yr_re_fiber_kill(&fibers, &storage->fiber_pool, fiber);
@@ -2244,7 +2250,7 @@ int yr_re_fast_exec(
     bytes_matched = matches_stack[sp];
     stop = FALSE;
 
-    while(!stop)
+    while (!stop)
     {
       if (*ip == RE_OPCODE_MATCH)
       {
@@ -2270,7 +2276,7 @@ int yr_re_fast_exec(
       if (bytes_matched >= max_bytes_matched)
         break;
 
-      switch(*ip)
+      switch (*ip)
       {
         case RE_OPCODE_LITERAL:
 
@@ -2320,10 +2326,10 @@ int yr_re_fast_exec(
 
           for (i = repeat_any_args->min + 1; i <= repeat_any_args->max; i++)
           {
-            next_input = input + i * input_incr;
-
             if (bytes_matched + i >= max_bytes_matched)
               break;
+
+            next_input = input + i * input_incr;
 
             if ( *(next_opcode) != RE_OPCODE_LITERAL ||
                 (*(next_opcode) == RE_OPCODE_LITERAL &&
@@ -2341,6 +2347,7 @@ int yr_re_fast_exec(
 
           input += input_incr * repeat_any_args->min;
           bytes_matched += repeat_any_args->min;
+          bytes_matched = yr_min(bytes_matched, max_bytes_matched);
           ip = next_opcode;
 
           break;
@@ -2366,7 +2373,7 @@ void _yr_re_print_node(
   if (re_node == NULL)
     return;
 
-  switch(re_node->type)
+  switch (re_node->type)
   {
   case RE_NODE_ALT:
     printf("Alt(");

@@ -192,6 +192,15 @@ static void test_arithmetic_operators()
   assert_true_rule(
       "rule test { condition: -0x01 == -1}", NULL);
 
+  assert_true_rule(
+      "rule test { condition: 0o10 == 8 }", NULL);
+
+  assert_true_rule(
+      "rule test { condition: 0o100 == 64 }", NULL);
+
+  assert_true_rule(
+      "rule test { condition: 0o755 == 493 }", NULL);
+
 }
 
 
@@ -1182,6 +1191,9 @@ void test_re()
 
   assert_regexp_syntax_error("\\xxy");
 
+  // Test case for issue #682
+  assert_true_regexp("(a|\\b)[a]{1,}", "aaaa", "aaaa");
+
   assert_error(
       "rule test { strings: $a = /a\\/ condition: $a }",
       ERROR_SYNTAX_ERROR);
@@ -1380,6 +1392,13 @@ static void test_modules()
       "import \"tests\" \
        rule test { \
         condition: tests.integer_array[1] == 1 \
+      }",
+      NULL);
+
+  assert_true_rule(
+      "import \"tests\" \
+       rule test { \
+        condition: tests.integer_array[256] == 256 \
       }",
       NULL);
 

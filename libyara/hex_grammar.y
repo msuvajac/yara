@@ -51,6 +51,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define mark_as_not_fast_regexp() \
     ((RE_AST*) yyget_extra(yyscanner))->flags &= ~RE_FLAGS_FAST_REGEXP
 
+#define incr_ast_levels() \
+    if (((RE_AST*) yyget_extra(yyscanner))->levels++ > RE_MAX_AST_LEVELS) \
+    { \
+      yyerror(yyscanner, lex_env, "string too long"); \
+      YYABORT; \
+    }
+
 #define ERROR_IF(x, error) \
     if (x) \
     { \
@@ -117,6 +124,8 @@ tokens
       }
     | token token
       {
+        incr_ast_levels();
+
         $$ = yr_re_node_create(RE_NODE_CONCAT, $1, $2);
 
         DESTROY_NODE_IF($$ == NULL, $1);
@@ -129,6 +138,8 @@ tokens
         RE_NODE* new_concat;
         RE_NODE* leftmost_concat = NULL;
         RE_NODE* leftmost_node = $2;
+
+        incr_ast_levels();
 
         $$ = NULL;
 
@@ -192,6 +203,8 @@ token_sequence
       }
     | token_sequence token_or_range
       {
+        incr_ast_levels();
+
         $$ = yr_re_node_create(RE_NODE_CONCAT, $1, $2);
 
         DESTROY_NODE_IF($$ == NULL, $1);
@@ -218,15 +231,6 @@ token_or_range
 token
     : byte
       {
-        lex_env->token_count++;
-
-        if (lex_env->token_count > MAX_HEX_STRING_TOKENS)
-        {
-          yr_re_node_destroy($1);
-          yyerror(yyscanner, lex_env, "string too long");
-          YYABORT;
-        }
-
         $$ = $1;
       }
     | '('
@@ -346,6 +350,7 @@ alternatives
     | alternatives '|' tokens
       {
         mark_as_not_fast_regexp();
+        incr_ast_levels();
 
         $$ = yr_re_node_create(RE_NODE_ALT, $1, $3);
 
