@@ -155,8 +155,8 @@
 
 /* In a future release of Bison, this section will be replaced
    by #include "grammar.h".  */
-#ifndef YY_YARA_YY_YARA_GRAMMAR_H_INCLUDED
-# define YY_YARA_YY_YARA_GRAMMAR_H_INCLUDED
+#ifndef YY_YARA_YY_GRAMMAR_H_INCLUDED
+# define YY_YARA_YY_GRAMMAR_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -300,7 +300,7 @@ typedef union YYSTYPE YYSTYPE;
 
 int yara_yyparse (void *yyscanner, YR_COMPILER* compiler);
 
-#endif /* !YY_YARA_YY_YARA_GRAMMAR_H_INCLUDED  */
+#endif /* !YY_YARA_YY_GRAMMAR_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
