@@ -91,7 +91,7 @@
 #define incr_ast_levels() \
     if (((RE_AST*) yyget_extra(yyscanner))->levels++ > RE_MAX_AST_LEVELS) \
     { \
-      lex_env->last_error_code = ERROR_INVALID_REGULAR_EXPRESSION; \
+      yyerror(yyscanner, lex_env, "regexp too long"); \
       YYABORT; \
     }
 

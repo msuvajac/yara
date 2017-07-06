@@ -93,6 +93,13 @@
 #define mark_as_not_fast_regexp() \
     ((RE_AST*) yyget_extra(yyscanner))->flags &= ~RE_FLAGS_FAST_REGEXP
 
+#define incr_ast_levels() \
+    if (((RE_AST*) yyget_extra(yyscanner))->levels++ > RE_MAX_AST_LEVELS) \
+    { \
+      yyerror(yyscanner, lex_env, "string too long"); \
+      YYABORT; \
+    }
+
 #define ERROR_IF(x, error) \
     if (x) \
     { \
@@ -127,7 +134,7 @@
 
 /* In a future release of Bison, this section will be replaced
    by #include "hex_grammar.h".  */
-#ifndef YY_HEX_YY_HEX_GRAMMAR_H_INCLUDED 
+#ifndef YY_HEX_YY_HEX_GRAMMAR_H_INCLUDED
 # define YY_HEX_YY_HEX_GRAMMAR_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
@@ -476,9 +483,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   105,   105,   114,   118,   127,   189,   193,   206,   210,
-     219,   233,   232,   245,   268,   300,   322,   342,   346,   360,
-     368
+       0,   112,   112,   121,   125,   136,   200,   204,   219,   223,
+     232,   237,   236,   249,   272,   304,   326,   346,   350,   365,
+     373
 };
 #endif
 
@@ -1340,6 +1347,8 @@ yyreduce:
   case 4:
 
     {
+        incr_ast_levels();
+
         (yyval.re_node) = yr_re_node_create(RE_NODE_CONCAT, (yyvsp[-1].re_node), (yyvsp[0].re_node));
 
         DESTROY_NODE_IF((yyval.re_node) == NULL, (yyvsp[-1].re_node));
@@ -1356,6 +1365,8 @@ yyreduce:
         RE_NODE* new_concat;
         RE_NODE* leftmost_concat = NULL;
         RE_NODE* leftmost_node = (yyvsp[-1].re_node);
+
+        incr_ast_levels();
 
         (yyval.re_node) = NULL;
 
@@ -1423,6 +1434,8 @@ yyreduce:
   case 7:
 
     {
+        incr_ast_levels();
+
         (yyval.re_node) = yr_re_node_create(RE_NODE_CONCAT, (yyvsp[-1].re_node), (yyvsp[0].re_node));
 
         DESTROY_NODE_IF((yyval.re_node) == NULL, (yyvsp[-1].re_node));
@@ -1453,15 +1466,6 @@ yyreduce:
   case 10:
 
     {
-        lex_env->token_count++;
-
-        if (lex_env->token_count > MAX_HEX_STRING_TOKENS)
-        {
-          yr_re_node_destroy((yyvsp[0].re_node));
-          yyerror(yyscanner, lex_env, "string too long");
-          YYABORT;
-        }
-
         (yyval.re_node) = (yyvsp[0].re_node);
       }
 
@@ -1605,6 +1609,7 @@ yyreduce:
 
     {
         mark_as_not_fast_regexp();
+        incr_ast_levels();
 
         (yyval.re_node) = yr_re_node_create(RE_NODE_ALT, (yyvsp[-2].re_node), (yyvsp[0].re_node));
 

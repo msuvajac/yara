@@ -124,6 +124,7 @@ with noyywrap then we can remove this pragma.
 digit         [0-9]
 letter        [a-zA-Z]
 hexdigit      [a-fA-F0-9]
+octdigit      [0-7]
 
 %%
 
