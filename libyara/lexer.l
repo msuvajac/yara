@@ -272,6 +272,8 @@ include[ \t]+\"         {
           yyerror(yyscanner, compiler, "includes depth exceeded");
         }
 
+        fclose(fh);
+
         yyterminate();
       }
 

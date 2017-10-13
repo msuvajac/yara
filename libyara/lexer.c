@@ -1441,6 +1441,8 @@ YY_RULE_SETUP
           yyerror(yyscanner, compiler, "includes depth exceeded");
         }
 
+        fclose(fh);
+
         yyterminate();
       }
 
