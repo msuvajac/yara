@@ -150,6 +150,7 @@ BLOB_PARSE_RESULT dotnet_parse_blob_entry(
 
   if (!fits_in_pe(pe, offset, 1))
   {
+    result.length = 0;
     result.size = 0;
     return result;
   }
@@ -164,6 +165,7 @@ BLOB_PARSE_RESULT dotnet_parse_blob_entry(
     // Make sure we have one more byte.
     if (!fits_in_pe(pe, offset, 2))
     {
+      result.length = 0;
       result.size = 0;
       return result;
     }
@@ -177,6 +179,7 @@ BLOB_PARSE_RESULT dotnet_parse_blob_entry(
     // Make sure we have 3 more bytes.
     if (!fits_in_pe(pe, offset, 4))
     {
+      result.length = 0;
       result.size = 0;
       return result;
     }
@@ -189,6 +192,8 @@ BLOB_PARSE_RESULT dotnet_parse_blob_entry(
   }
   else
   {
+    result.length = 0;
+    
     // Return a 0 size as an error.
     result.size = 0;
   }
