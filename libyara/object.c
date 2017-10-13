@@ -58,8 +58,7 @@ int yr_object_create(
   int i;
   size_t object_size = 0;
 
-  if (parent == NULL || object == NULL)
-    return ERROR_INVALID_ARGUMENT;
+  assert(parent != NULL || object != NULL);
 
   switch (type)
   {
