@@ -3268,6 +3268,7 @@ int yr_lex_parse_rules_fd(
   file_str[total_bytes++] = YY_END_OF_BUFFER_CHAR;
 
   yy_scan_buffer(file_str, total_bytes, yyscanner);
+  yyset_lineno(1, yyscanner);
 
   yyparse(yyscanner, compiler);
 
