@@ -32,6 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <yara/strutils.h>
 
+#include <config.h>
+
 uint64_t xtoi(
     const char* hexstr)
 {

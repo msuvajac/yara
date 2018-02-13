@@ -48,6 +48,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "args.h"
 
+#include <config.h>
 
 #ifndef MAX_PATH
 #define MAX_PATH 256

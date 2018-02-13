@@ -54,6 +54,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "args.h"
 #include "threading.h"
 
+#include <config.h>
 
 #define ERROR_COULD_NOT_CREATE_THREAD  100
 

@@ -31,6 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define YR_ENDIAN_H
 
 #include <yara/integers.h>
+#include <config.h>
 
 
 #if defined(__has_builtin)
